@@ -1,3 +1,0 @@
-/home/demis/sistemas/solemne2/build/CMakeFiles/concurrent_image_recorder.dir
-/home/demis/sistemas/solemne2/build/CMakeFiles/edit_cache.dir
-/home/demis/sistemas/solemne2/build/CMakeFiles/rebuild_cache.dir
