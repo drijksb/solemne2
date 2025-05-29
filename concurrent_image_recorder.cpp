@@ -34,34 +34,30 @@ private:
     std::queue<ImageData> queue;
     std::mutex mutex;
     std::condition_variable cv;
+    std::condition_variable cv_full; // <-- nueva
     std::atomic<bool> done{false};
+    size_t max_size; // <-- nueva
     
 public:
-    /**
-     * @brief Agrega una imagen a la cola
-     * @param data Datos de la imagen a agregar
-     */
+    ThreadSafeQueue(size_t max_size = 100) : max_size(max_size) {}
+    
     void push(const ImageData& data) {
         std::unique_lock<std::mutex> lock(mutex);
+        cv_full.wait(lock, [this] { return queue.size() < max_size || done; }); // <-- espera si está llena
+        if (done) return; // si está terminado, no agregar más
         queue.push(data);
         cv.notify_one();
     }
     
-    /**
-     * @brief Intenta obtener una imagen de la cola
-     * @param result Referencia donde se colocará la imagen obtenida
-     * @return true si se obtuvo una imagen, false si la cola está vacía y terminada
-     */
     bool pop(ImageData& result) {
         std::unique_lock<std::mutex> lock(mutex);
         cv.wait(lock, [this] { return !queue.empty() || done; });
-        
         if (queue.empty() && done) {
             return false;
         }
-        
         result = queue.front();
         queue.pop();
+        cv_full.notify_one(); // <-- avisa que hay espacio disponible
         return true;
     }
     
@@ -192,13 +188,12 @@ void imageWriterThread(
         // Crear nombre de archivo
         std::ostringstream filename;
         filename << outputDir << "/img_" << std::setw(8) << std::setfill('0') 
-                 << data.sequenceNumber << "_t" << threadId << ".png";
-        
-        // Escribir imagen
+                << data.sequenceNumber << "_t" << threadId << ".jpg"; // <-- CAMBIA la extensión
+
+        // Escribir imagen JPG
         std::vector<int> compressionParams;
-        compressionParams.push_back(cv::IMWRITE_PNG_COMPRESSION);
-        compressionParams.push_back(1); // Compresión rápida (0-9, donde 0 es sin compresión y 9 es máxima)
-        
+        compressionParams.push_back(cv::IMWRITE_JPEG_QUALITY);
+        compressionParams.push_back(90); // Calidad 0-100 (más alto = mejor calidad/archivo más grande)
         bool success = cv::imwrite(filename.str(), data.image, compressionParams);
         
         if (success) {
@@ -291,7 +286,7 @@ int main(int argc, char** argv) {
     // Parámetros por defecto
     int targetFPS = 50;
     int runTime = 300; // 5 minutos en segundos
-    int numWriterThreads = 8;
+    int numWriterThreads = 4;
     std::string outputDir = "output";
     int imageWidth = 1920;
     int imageHeight = 1280;
