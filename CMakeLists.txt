@@ -1,35 +1,36 @@
 cmake_minimum_required(VERSION 3.10)
-project(concurrent_image_recorder)
+project(RandomImageGenerator)
 
-# Requerir C++17
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-# Encontrar paquetes
+# OpenCV
 find_package(OpenCV REQUIRED)
-find_package(Threads REQUIRED)
-
-# Incluir directorios
-include_directories(${OpenCV_INCLUDE_DIRS})
-
-# Agregar ejecutable
-add_executable(concurrent_image_recorder concurrent_image_recorder.cpp)
-
-# Vincular bibliotecas
-target_link_libraries(concurrent_image_recorder ${OpenCV_LIBS} ${CMAKE_THREAD_LIBS_INIT})
-
-# Agregar flags de optimización para Release
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
-
-# Verificar que estamos trabajando con C++17 o superior (para filesystem)
-if(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
-    if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS 8.0)
-        message(STATUS "GCC versión < 8.0, agregando -lstdc++fs")
-        target_link_libraries(concurrent_image_recorder stdc++fs)
-    endif()
-elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-    if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS 7.0)
-        message(STATUS "Clang versión < 7.0, agregando -lstdc++fs")
-        target_link_libraries(concurrent_image_recorder stdc++fs)
-    endif()
+if (NOT OpenCV_FOUND)
+    message(FATAL_ERROR "OpenCV not found. Please set OpenCV_DIR.")
 endif()
+
+# TurboJPEG
+find_path(TURBOJPEG_INCLUDE_DIR NAMES turbojpeg.h)
+find_library(TURBOJPEG_LIB NAMES turbojpeg)
+
+if (NOT TURBOJPEG_INCLUDE_DIR OR NOT TURBOJPEG_LIB)
+    message(FATAL_ERROR "TurboJPEG not found. Please install libturbojpeg-dev")
+endif()
+
+include_directories(
+    ${OpenCV_INCLUDE_DIRS}
+    ${TURBOJPEG_INCLUDE_DIR}
+    ${PROJECT_SOURCE_DIR}/include
+)
+
+add_executable(random_image_generator 
+    src/main.cpp 
+    src/ImageGenerator.cpp 
+    src/ImageWriter.cpp 
+    src/ThreadSafeQueue.cpp 
+    src/TurboJPEGWriter.cpp 
+    src/Utils.cpp
+)
+
+target_link_libraries(random_image_generator 
+    ${OpenCV_LIBS}
+    ${TURBOJPEG_LIB}
+)

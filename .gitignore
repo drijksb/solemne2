@@ -108,7 +108,6 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-/build/
-/output/
+build/
 
 # End of https://www.toptal.com/developers/gitignore/api/c++,visualstudiocode,windows,opencv,cmake
