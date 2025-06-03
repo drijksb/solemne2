@@ -18,12 +18,13 @@ ThreadSafeQueue::ThreadSafeQueue(size_t max_size) : max_size(max_size) {}
  * 
  * @param data Objeto ImageData a insertar.
  */
-void ThreadSafeQueue::push(const ImageData& data) {
+bool ThreadSafeQueue::push(const ImageData& data) {
     std::unique_lock<std::mutex> lock(mutex);
     cv_full.wait(lock, [this] { return queue.size() < max_size || done; });
-    if (done) return;
+    if (done) return false;
     queue.push(data);
     cv.notify_one();
+    return true;
 }
 
 /**

@@ -28,6 +28,7 @@ void imageWriterThread(
     ThreadSafeQueue& queue, 
     const std::string& outputDir,
     std::atomic<size_t>& statsBytesWritten,
+    std::atomic<size_t>& imagesSaved,
     int threadId) {
     
     size_t imagesWritten = 0;
@@ -47,6 +48,8 @@ void imageWriterThread(
         if (success) {
             // Actualizar estadísticas
             imagesWritten++;
+            imagesSaved++;
+
             
             // Calcular tamaño del archivo y actualizar estadísticas
             std::filesystem::path filePath(filename.str());

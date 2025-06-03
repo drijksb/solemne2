@@ -29,6 +29,7 @@ void imageGeneratorThread(
     int height, 
     int targetFPS,
     std::chrono::seconds runDuration,
-    std::atomic<size_t>& statsImageCount);
+    std::atomic<size_t>& statsImageCount,
+    std::atomic<size_t>& imagesEnqueued);
 
 #endif // IMAGEGENERATOR_H

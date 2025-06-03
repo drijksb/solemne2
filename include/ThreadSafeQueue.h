@@ -41,7 +41,7 @@ public:
      * 
      * @param data Imagen a insertar.
      */
-    void push(const ImageData& data);
+    bool push(const ImageData& data);
 
     /**
      * @brief Extrae un dato de la cola.

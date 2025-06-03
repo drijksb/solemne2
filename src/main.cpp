@@ -107,6 +107,9 @@ int main(int argc, char** argv) {
     // Contadores para estadísticas
     std::atomic<size_t> statsImageCount{0};
     std::atomic<size_t> statsBytesWritten{0};
+    std::atomic<size_t> imagesEnqueued{0};
+    std::atomic<size_t> imagesSaved{0};
+
     
     // Vector de hilos
     std::vector<std::thread> threads;
@@ -122,7 +125,8 @@ int main(int argc, char** argv) {
         imageHeight, 
         targetFPS, 
         runDuration, 
-        std::ref(statsImageCount)
+        std::ref(statsImageCount),
+        std::ref(imagesEnqueued)
     );
     
     // Iniciar hilos escritores
@@ -131,7 +135,8 @@ int main(int argc, char** argv) {
             imageWriterThread, 
             std::ref(imageQueue), 
             outputDir, 
-            std::ref(statsBytesWritten), 
+            std::ref(statsBytesWritten),
+            std::ref(imagesSaved),
             i + 1
         );
     }
@@ -157,6 +162,8 @@ int main(int argc, char** argv) {
     std::cout << "\n=== Resultados Finales ===" << std::endl;
     std::cout << "Tiempo total: " << elapsedSeconds << " segundos" << std::endl;
     std::cout << "Imágenes generadas: " << totalImages << std::endl;
+    std::cout << "Imágenes encoladas: " << imagesEnqueued.load() << std::endl;
+    std::cout << "Imágenes guardadas (total): " << imagesSaved.load() << std::endl;
     std::cout << "Velocidad promedio: " << std::fixed << std::setprecision(2) 
               << (totalImages / elapsedSeconds) << " FPS" << std::endl;
     std::cout << "Datos grabados: " << formatByteSize(totalBytes) << std::endl;

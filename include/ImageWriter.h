@@ -16,6 +16,7 @@ void imageWriterThread(
     ThreadSafeQueue& queue, 
     const std::string& outputDir,
     std::atomic<size_t>& statsBytesWritten,
+    std::atomic<size_t>& imagesSaved,
     int threadId);
 
 #endif // IMAGEWRITER_H
