@@ -21,7 +21,7 @@ include_directories(
     ${PROJECT_SOURCE_DIR}/include
 )
 
-add_executable(random_image_generator 
+add_executable(fastcap
     src/main.cpp 
     src/ImageGenerator.cpp 
     src/ImageWriter.cpp 
@@ -30,7 +30,18 @@ add_executable(random_image_generator
     src/Utils.cpp
 )
 
-target_link_libraries(random_image_generator 
+target_link_libraries(fastcap 
     ${OpenCV_LIBS}
     ${TURBOJPEG_LIB}
 )
+
+add_executable(tests
+    tests/main.cpp
+)
+
+target_link_libraries(tests 
+    ${OpenCV_LIBS}
+    ${TURBOJPEG_LIB}
+)
+
+
