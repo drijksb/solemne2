@@ -49,7 +49,7 @@ void showHelp() {
               << "  -w, --width <píxeles>   Ancho de las imágenes (default: 1920)\n"
               << "  -h, --height <píxeles>  Alto de las imágenes (default: 1080)\n"
               << "  -e, --ext <extensión>   Extensión de archivo (default: jpg)\n"
-              << "  -o, --output <directorio> Directorio de salida (default: ./output)\n"
+              << "  -o, --output <directorio> Directorio de salida (default: ./tests_output)\n"
               << "  -p, --prefix <prefijo>  Prefijo para nombres de archivo (default: img)\n"
               << "\nExtensiones soportadas: jpg, jpeg, png, bmp, tiff, tif, webp, pbm, pgm, ppm, pxm, pnm\n"
               << "\nEjemplos:\n"
