@@ -37,6 +37,7 @@ target_link_libraries(fastcap
 
 add_executable(tests
     tests/main.cpp
+    src/TurboJPEGWriter.cpp 
 )
 
 target_link_libraries(tests 

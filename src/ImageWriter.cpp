@@ -42,8 +42,8 @@ void imageWriterThread(
         filename << outputDir << "/img_" << std::setw(8) << std::setfill('0') 
                 << data.sequenceNumber << "_t" << threadId << ".jpg";
 
-        // Escribir imagen JPG
-        bool success = writeJPEG_turbo(data.image, filename.str(), 70);
+        // Escribir imagen BMP
+        bool success = cv::imwrite(filename.str(), data.image);
         
         if (success) {
             // Actualizar estadísticas
