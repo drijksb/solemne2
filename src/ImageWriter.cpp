@@ -40,7 +40,7 @@ void imageWriterThread(
         // Crear nombre de archivo
         std::ostringstream filename;
         filename << outputDir << "/img_" << std::setw(8) << std::setfill('0') 
-                << data.sequenceNumber << "_t" << threadId << ".jpg";
+                << data.sequenceNumber << "_t" << threadId << ".bmp";
 
         // Escribir imagen BMP
         bool success = cv::imwrite(filename.str(), data.image);
