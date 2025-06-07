@@ -46,8 +46,8 @@ void showHelp() {
               << "Opciones:\n"
               << "  -h, --help              Muestra esta ayuda\n"
               << "  -c, --count <número>    Número de imágenes a generar (default: 1000)\n"
-              << "  -w, --width <píxeles>   Ancho de las imágenes (default: 1920)\n"
-              << "  -h, --height <píxeles>  Alto de las imágenes (default: 1080)\n"
+              << "  -x, --width <píxeles>   Ancho de las imágenes (default: 1920)\n"
+              << "  -y, --height <píxeles>  Alto de las imágenes (default: 1080)\n"
               << "  -e, --ext <extensión>   Extensión de archivo (default: jpg)\n"
               << "  -o, --output <directorio> Directorio de salida (default: ./output)\n"
               << "  -p, --prefix <prefijo>  Prefijo para nombres de archivo (default: img)\n"
@@ -92,14 +92,14 @@ bool parseArguments(int argc, char* argv[], Config& config) {
                 return false;
             }
         }
-        else if ((arg == "-w" || arg == "--width") && i + 1 < argc) {
+        else if ((arg == "-x" || arg == "--width") && i + 1 < argc) {
             config.width = std::atoi(argv[++i]);
             if (config.width <= 0) {
                 std::cerr << "Error: El ancho debe ser mayor a 0\n";
                 return false;
             }
         }
-        else if ((arg == "--height") && i + 1 < argc) {
+        else if ((arg == "-y" || arg == "--height") && i + 1 < argc) {
             config.height = std::atoi(argv[++i]);
             if (config.height <= 0) {
                 std::cerr << "Error: El alto debe ser mayor a 0\n";
