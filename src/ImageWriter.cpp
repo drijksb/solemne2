@@ -16,7 +16,7 @@
  * @brief Función para el hilo que escribe imágenes JPEG desde una cola segura.
  * 
  * Este hilo extrae imágenes de una cola segura (`queue`), las guarda en disco en el directorio
- * `outputDir` con un nombre basado en el número de secuencia y el ID del hilo. Usa TurboJPEG
+ * `output` con un nombre basado en el número de secuencia y el ID del hilo. Usa TurboJPEG
  * para la compresión con calidad fija. Actualiza estadísticas atómicas del total de bytes escritos.
  * 
  * @param queue Cola segura de imágenes a escribir.

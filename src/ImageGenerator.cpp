@@ -63,7 +63,7 @@ void imageGeneratorThread(
         cv::Mat img = generateRandomImage(width, height);
 
         // Encolar imagen para ser grabada
-        if (queue.push(ImageData(img, frameCount))) {
+        if (queue.push(ImageData(img, statsImageCount))) {
             imagesEnqueued++;
         }
 

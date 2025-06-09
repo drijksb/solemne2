@@ -19,12 +19,13 @@ ThreadSafeQueue::ThreadSafeQueue(size_t max_size) : max_size(max_size) {}
 bool ThreadSafeQueue::push(const ImageData& data) {
     std::unique_lock<std::mutex> lock(mutex); // Protege el acceso concurrente a la cola
 
-    // Si la cola está llena y no se ha finalizado, rechaza el dato (no bloquea)
+    // Si la cola está llena y no se ha finalizado, elimina el primer dato de la cola
+    // para generar un espacio para este nuevo dato
     if (queue.size() >= max_size && !done) {
-        return false;
+        queue.pop();
     }
 
-    // Si la cola ya fue finalizada, tampoco encola el dato
+    // Si la cola ya fue finalizada no encola el dato
     if (done) return false;
 
     // Encola el dato
